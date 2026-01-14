@@ -1,0 +1,65 @@
+# ==================================================
+# Global / Common
+# ==================================================
+.env
+*.log
+.DS_Store
+.idea/
+.vscode/
+*.sw?
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ==================================================
+# Backend (FastAPI / Python)
+# ==================================================
+
+# Python cache
+backend/__pycache__/
+backend/**/*.py[oc]
+
+# Build artifacts
+backend/build/
+backend/dist/
+backend/wheels/
+backend/*.egg-info/
+
+# Virtual environments
+backend/.venv/
+backend/venv/
+
+# Tooling / cache
+backend/.pytest_cache/
+backend/.mypy_cache/
+backend/.uv/
+
+# Secrets / local files
+backend/.env
+backend/newapiResponse.txt
+
+# ==================================================
+# Frontend (React / Node)
+# ==================================================
+
+# Dependencies
+frontend/node_modules/
+
+# Production builds
+frontend/dist/
+frontend/dist-ssr/
+frontend/build/
+
+# Environment files
+frontend/.env
+frontend/.env.local
+frontend/*.local
+
+# Logs
+frontend/logs/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
