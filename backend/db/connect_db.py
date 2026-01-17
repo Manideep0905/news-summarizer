@@ -15,13 +15,13 @@ async def lifespan(app: FastAPI):
 
 # method for starting the mongodb connection
 async def startup_db_client(app: FastAPI):
-    app.mongodb_client = AsyncIOMotorClient(settings.MONGODB_URL)
-    app.mongodb = app.mongodb_client.get_database(settings.DB_NAME)
-    await app.mongodb["users"].create_index("email", unique=True)
+    app.state.mongodb_client = AsyncIOMotorClient(settings.MONGODB_URL)
+    app.state.mongodb = app.state.mongodb_client.get_database(settings.DB_NAME)
+    await app.state.mongodb["users"].create_index("email", unique=True)
     print("MongoDB connected")
 
 
 # method for closing the mongodb connection
 async def shutdown_db_client(app: FastAPI):
-    app.mongodb_client.close()
+    app.state.mongodb_client.close()
     print("MongoDB disconnected")
