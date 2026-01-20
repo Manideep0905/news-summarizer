@@ -62,12 +62,9 @@ function Login() {
     return (
         <div className="bg-gray-200 dark:bg-gray-800 dark:text-white p-10 shadow-lg">
             <form onSubmit={handleSubmit} className="w-2xs sm:w-md mx-auto">
-                {
-                    errorMsg &&
-                        <div>
-                            <p className="text-red-500 text-center">{errorMsg}</p>
-                        </div>
-                }
+
+                {errorMsg && <p className="text-red-500 text-center">{errorMsg}</p>}
+
                 <div className="mb-5 flex flex-col">
                     <label className="block mb-2.5 text-sm font-medium">Email</label>
                         <input 
