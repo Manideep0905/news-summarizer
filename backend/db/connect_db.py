@@ -1,7 +1,10 @@
 from motor.motor_asyncio import AsyncIOMotorClient
+from beanie import init_beanie
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from core.config import settings
+from models.user import User
+from models.article import Article
 
 
 # define a lifespan method for fastapi
@@ -15,9 +18,14 @@ async def lifespan(app: FastAPI):
 
 # method for starting the mongodb connection
 async def startup_db_client(app: FastAPI):
-    app.state.mongodb_client = AsyncIOMotorClient(settings.MONGODB_URL)
-    app.state.mongodb = app.state.mongodb_client.get_database(settings.DB_NAME)
-    await app.state.mongodb["users"].create_index("email", unique=True)
+    client = AsyncIOMotorClient(settings.MONGODB_URL)
+    app.state.mongodb_client = client
+
+    await init_beanie(
+        database=client[settings.DB_NAME],
+        document_models=[User, Article]
+    )
+
     print("MongoDB connected")
 
 

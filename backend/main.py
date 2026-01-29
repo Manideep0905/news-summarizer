@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.config import settings
-from routers import articles, users
+from routes import articles, users
 from db.connect_db import lifespan
 
 app = FastAPI(

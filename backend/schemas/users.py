@@ -1,19 +1,25 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 
 class UserRegisterRequest(BaseModel):
+    first_name: str
+    last_name: str
+    username: str
     email: EmailStr
     password: str
 
 
 class UserLoginRequest(BaseModel):
-    email: EmailStr
+    emailOrUsername: str
     password: str
 
 
 class UserResponse(BaseModel):
     id: str
     email: EmailStr
+    username: str
+    message: Optional[str] = None
 
 
 class TokenResponse(BaseModel):
