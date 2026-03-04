@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { API_BASE_URL } from "../util.js";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../store/authSlice.js";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Login() {
 
-    const [email, setEmail] = useState("");
+    const [emailOrUsername, setEmailOrUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const[errorMsg, setErrorMsg] = useState("");
+    
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -15,7 +22,7 @@ function Login() {
         const loginUrl = `${API_BASE_URL}/users/login`;
 
         const loginInfo = {
-            email: email,
+            emailOrUsername: emailOrUsername,
             password: password
         }
 
@@ -56,23 +63,32 @@ function Login() {
         }
 
         setErrorMsg("");
+        toast.success("Login successful", {
+            style: {
+                background: "#333",
+                color: "#fff"
+            },
+            position: "bottom-center"
+        });
+        dispatch(login());
+        navigate("/");
         console.log(data);
     }
 
     return (
         <div className="bg-gray-200 dark:bg-gray-800 dark:text-white p-10 shadow-lg">
-            <form onSubmit={handleSubmit} className="w-2xs sm:w-md mx-auto">
+            <form onSubmit={handleSubmit} className="w-56 sm:w-64 md:w-72 lg:w-96 mx-auto">
 
                 {errorMsg && <p className="text-red-500 text-center">{errorMsg}</p>}
 
                 <div className="mb-5 flex flex-col">
-                    <label className="block mb-2.5 text-sm font-medium">Email</label>
+                    <label className="block mb-2.5 text-sm font-medium">Email or Username</label>
                         <input 
                             type="text" 
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={emailOrUsername}
+                            onChange={(e) => setEmailOrUsername(e.target.value)}
                             className="p-2 border"
-                            placeholder="Enter your email"
+                            placeholder="Enter your email or username"
                         />
                 </div>
                 <div className="mb-5 flex flex-col">
