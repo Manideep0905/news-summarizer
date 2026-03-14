@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { API_BASE_URL } from "../util.js";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice.js";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +20,7 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const registerUrl = `${API_BASE_URL}/users/register`;
+        const registerUrl = "http://localhost:8000/api/users/register";
 
         const registerInfo = {
             first_name: firstName,
@@ -69,9 +68,8 @@ function Register() {
 
         setErrorMsg("");
         toast.success("User registered");
-        dispatch(login());
+        dispatch(login(data));
         navigate("/");
-        console.log(data);
     }
 
     return (

@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { API_BASE_URL } from "../util.js";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice.js";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +17,7 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const loginUrl = `${API_BASE_URL}/users/login`;
+        const loginUrl = "http://localhost:8000/api/users/login";
 
         const loginInfo = {
             emailOrUsername: emailOrUsername,
@@ -70,9 +68,8 @@ function Login() {
             },
             position: "bottom-center"
         });
-        dispatch(login());
+        dispatch(login(data));
         navigate("/");
-        console.log(data);
     }
 
     return (

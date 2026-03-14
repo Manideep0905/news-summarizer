@@ -1,5 +1,4 @@
-import axios from "axios";
-import { API_BASE_URL } from "../util.js";
+import api from "../api/axios.js";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Spinner } from "../components/index.js";
@@ -15,8 +14,8 @@ function DetailPage() {
 
     const fetchDetailedArticle = async () => {
         try {
-            const response = await axios.get(
-                `${API_BASE_URL}/articles/detail`,
+            const response = await api.get(
+                "/api/articles/detail",
                 {
                     params: { article_url: articleUrl }
                 }
@@ -25,6 +24,8 @@ function DetailPage() {
         }
         catch (error) {
             console.log("Error while fetching detailed article", error);
+            setError("The website does not allow scraping");
+            return;
         }
         finally {
             setLoading(false);

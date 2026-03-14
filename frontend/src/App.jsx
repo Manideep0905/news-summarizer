@@ -1,6 +1,26 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import api from "./api/axios.js";
+import { useDispatch } from "react-redux";
+import { login, logout } from "./store/authSlice.js";
 
 function App() {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const res = await api.get("/api/users/me");
+                dispatch(login(res.data));
+            }
+            catch { 
+                dispatch(logout());
+            }
+        }
+
+        checkAuth();
+    }, []);
 
     return (
         <div className="flex flex-col justify-center items-center gap-10 min-h-full">
