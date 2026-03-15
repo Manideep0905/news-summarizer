@@ -1,6 +1,4 @@
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { logout } from "../store/authSlice.js";
 
 const api = axios.create({
     baseURL: "http://localhost:8000",
@@ -11,19 +9,24 @@ api.interceptors.response.use(
     response => response,
     async error => {
 
-        const dispatch = useDispatch();
-
         const originalRequest = error.config;
 
-        if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url.includes("/users/refresh")) {
+        if (error.response?.status === 401 &&
+            !originalRequest._retry &&
+            !originalRequest.url.includes("/api/users/refresh")
+        ) {
 
             originalRequest._retry = true;
 
             try {
                 await api.post("/api/users/refresh");
                 return api(originalRequest);
-            } catch (refreshError) {
-                dispatch(logout());
+            } catch {
+
+                // only redirect to /login if request was protected.
+                if (!originalRequest.url.includes("/articles")) {
+                    return Promise.reject(error);
+                }
                 window.location.href = "/login";
             }
         }

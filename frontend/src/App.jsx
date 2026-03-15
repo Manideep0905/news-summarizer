@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "./api/axios.js";
 import { useDispatch } from "react-redux";
 import { login, logout } from "./store/authSlice.js";
@@ -7,6 +7,7 @@ import { login, logout } from "./store/authSlice.js";
 function App() {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -16,6 +17,7 @@ function App() {
             }
             catch { 
                 dispatch(logout());
+                navigate("/");
             }
         }
 

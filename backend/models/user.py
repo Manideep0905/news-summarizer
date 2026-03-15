@@ -15,7 +15,7 @@ class User(Document):
 
     refresh_token: Optional[str] = None
 
-    saved_articles: List[PydanticObjectId] = Field(default_factory=list)
+    saved_articles: List[str] = Field(default_factory=list)
 
     created_at: datetime = Field(default_factory=datetime.utcnow)
 

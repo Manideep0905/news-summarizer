@@ -5,7 +5,7 @@ import App from './App.jsx'
 import { Provider } from 'react-redux'
 import store from './store/store.js'
 import { createBrowserRouter, createRoutesFromElements, Routes, Route, RouterProvider } from 'react-router-dom'
-import { Articles, LoginPage, DetailPage, MyArticlesPage, RegisterPage } from './pages/index.js'
+import { Articles, LoginPage, DetailPage, MyArticlesPage, RegisterPage, SummarizePage } from './pages/index.js'
 import { AuthLayout, MainLayout } from './layout/index.js'
 import { ArticleForm } from './components/index.js'
 
@@ -17,6 +17,7 @@ const router = createBrowserRouter(
                 <Route path='/articles/form' element={<ArticleForm />} />
                 <Route path='/articles/:category' element={<Articles />} />
                 <Route path='/articles/detail' element={<DetailPage />} />
+                <Route path='/articles/summary' element={<SummarizePage />} />
                 <Route path='/my-articles' element={<MyArticlesPage />} />
             </Route>
             <Route element={<AuthLayout />}> 

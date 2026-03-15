@@ -8,10 +8,10 @@ from bson import ObjectId
 class Article(Document):
     title: str
     description: Optional[str]
-    full_content: str
-    summarized_content: str
     image_url: Optional[str]
     source: str
+    summary: Optional[List[str]] = []
+    bias: Optional[str] = None
 
     article_url: str = Indexed(unique=True)
 

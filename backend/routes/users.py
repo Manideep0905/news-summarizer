@@ -2,6 +2,8 @@ from fastapi import APIRouter, HTTPException, status, Depends, Request, Response
 from bson import ObjectId, decode
 from datetime import timedelta
 from typing import Optional
+
+from jose import ExpiredSignatureError
 from models.user import User
 from beanie import PydanticObjectId
 from beanie.odm.operators.find.logical import Or
@@ -133,8 +135,8 @@ async def logout_user(
     await user.save()
 
     # clear the access and refresh tokens from the cookies.
-    response.delete_cookie("access_token")
-    response.delete_cookie("refresh_token")
+    response.delete_cookie("access_token", path="/")
+    response.delete_cookie("refresh_token", path="/")
 
     return {
         "message": "User logged out successfully"
@@ -142,9 +144,10 @@ async def logout_user(
 
 @router.post("/refresh", response_model=TokenResponse)
 async def refresh_token(
-    body: TokenRefreshRequest
+    request: Request,
+    response: Response
 ):
-    token = body.refresh_token
+    token = request.cookies.get("refresh_token")
 
     try:
         payload = decode_token(token)
@@ -194,13 +197,34 @@ async def refresh_token(
 
 
     # issue new access and refresh tokens
-    new_access = create_access_token(subject=user_id)
-    new_refresh = create_refresh_token(subject=user_id)
+    new_access = create_access_token(subject=str(user_id))
+    new_refresh = create_refresh_token(subject=str(user_id))
 
     user_doc.refresh_token = new_refresh
     await user_doc.save()
 
-    return TokenResponse(access_token=new_access, refresh_token=new_refresh)
+    cookie_options = {
+        "httponly": True,
+        "secure": False,
+        "samesite": "lax",
+        "path": "/"
+    }
+
+    response.set_cookie(
+        key="access_token",
+        value=new_access,
+        **cookie_options
+    )
+
+    response.set_cookie(
+        key="refresh_token",
+        value=new_refresh,
+        **cookie_options
+    )
+
+    return {
+        "message": "Tokens refreshed"
+    }
 
 
 async def get_current_user(
@@ -214,7 +238,13 @@ async def get_current_user(
             detail="Not authenticated"
         )
 
-    payload = decode_token(token)
+    try:
+        payload = decode_token(token)
+    except ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Access token expired"
+        )
 
     user_id = payload.get("sub")
     if not user_id:
@@ -240,11 +270,15 @@ async def get_current_user(
     return user_doc
 
 
-@router.get("/me", response_model=UserResponse)
+@router.get("/me")
 async def read_me(
-    user_doc = Depends(get_current_user)
+    current_user=Depends(get_current_user)
 ):
-    return _user_dict_to_response(user_doc)
+    return {
+        "id": str(current_user.id),
+        "username": current_user.username,
+        "email": current_user.email
+    }
 
 
 @router.delete("/{user_id}", status_code=status.HTTP_200_OK)

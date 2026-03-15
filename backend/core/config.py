@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     NEWSAPI_API_KEY: str = ""
     MONGODB_URL: str = ""
     JWT_SECRET_KEY: str = "" 
+    OPENAI_API_KEY: str = ""
 
     ALLOWED_ORIGINS: str = ""
     ALGORITHM: str = "HS256"

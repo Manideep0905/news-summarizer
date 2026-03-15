@@ -67,8 +67,13 @@ function Register() {
         }
 
         setErrorMsg("");
-        toast.success("User registered");
-        dispatch(login(data));
+        toast.success("User registered", {
+            style: {
+                background: "#333",
+                color: "#fff"
+            },
+            position: "bottom-center"
+        });
         navigate("/");
     }
 

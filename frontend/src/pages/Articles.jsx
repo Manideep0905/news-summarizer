@@ -15,7 +15,7 @@ function Articles() {
     const fetchArticles = async () => {
         try {
             const response = await api.get(`/api/articles/${category}`);
-            if (authStatus) {
+            if (authStatus === true) {
                 const res = await api.get("/api/articles/saved-articles-ids");
                 setSavedArticlesArr(res.data);
             }
@@ -44,7 +44,6 @@ function Articles() {
                 image_url: article.image_url,
                 source: article.source,
                 article_url: article.article_url,
-                summary: article.summary
             }
 
             await api.post("/api/articles/save-article", payload);
@@ -62,7 +61,7 @@ function Articles() {
     }
 
     return (
-        <div className="bg-white dark:bg-gray-700">
+        <div className="bg-white dark:bg-gray-700 w-screen">
             <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
 
                 <h2 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white mb-10">
@@ -87,54 +86,44 @@ function Articles() {
                                     authStatus ?
                                         <div className="p-4 flex justify-between">
                                             <Link 
-                                                className="inline-block w-fit dark:bg-indigo-500 p-2 dark:text-white text-lg cursor-pointer"
+                                                className="inline-block w-fit dark:bg-indigo-500 p-1 text-sm lg:p-2 lg:text-lg dark:text-white cursor-pointer"
                                                 to={`/articles/detail?url=${encodeURIComponent(article.article_url)}`}
                                             >
                                                 Detailed view
                                             </Link>
                                             <Link
-                                                className="inline-block w-fit dark:bg-blue-600 p-2 dark:text-white text-lg cursor-pointer"
+                                                className="inline-block w-fit dark:bg-blue-600 p-1 text-sm lg:p-2 lg:text-lg dark:text-white cursor-pointer"
+                                                to={`/articles/summary?url=${encodeURIComponent(article.article_url)}`}
                                             >
                                                 Summarize
                                             </Link>
                                             {
                                                 savedArticlesArr.includes(article.article_url) ? (
-                                                    <Link
-                                                        className="inline-block w-fit dark:bg-gray-600 p-2 dark:text-white text-lg cursor-pointer"
+                                                    <button
+                                                        className="inline-block w-fit dark:bg-gray-600 p-1 text-sm lg:p-2 lg:text-lg dark:text-white cursor-pointer"
+                                                        disabled={true}
                                                     >
                                                         Saved
-                                                    </Link>
+                                                    </button>
                                                 ) : (
-                                                        <Link
-                                                            className="inline-block w-fit dark:bg-green-600 p-2 dark:text-white text-lg cursor-pointer"
+                                                        <button
+                                                            className="inline-block w-fit dark:bg-green-600 p-1 text-sm lg:p-2 lg:text-lg dark:text-white cursor-pointer"
                                                             onClick={() => handleSave(article)}
                                                         >
                                                             Save
-                                                        </Link>
+                                                        </button>
                                                     )
                                             }
                                         </div>
                                         :
-                                        <Link 
-                                            className="inline-block w-fit dark:bg-indigo-500 p-2 dark:text-white text-lg cursor-pointer"
-                                            to={`/articles/detail?url=${encodeURIComponent(article.article_url)}`}
-                                        >
-                                            Detailed view
-                                        </Link>
-                                    /*
-                                        savedArticlesArr.includes(article.id) ?
-                                            <Link
-                                                className="inline-block w-fit dark:bg-green-500 p-2 dark:text-white text-lg cursor-pointer"
+                                        <div className="p-4 flex justify-between">
+                                            <Link 
+                                                className="inline-block w-fit dark:bg-indigo-500 p-1 text-sm lg:p-2 lg:text-lg dark:text-white cursor-pointer"
+                                                to={`/articles/detail?url=${encodeURIComponent(article.article_url)}`}
                                             >
-                                                Saved
+                                                Detailed view
                                             </Link>
-                                            :
-                                            <Link
-                                                className="inline-block w-fit dark:bg-green-500 p-2 dark:text-white text-lg cursor-pointer"
-                                            >
-                                                Save
-                                            </Link>
-                                        */
+                                        </div>
                                 }
                             </div>
                         ))
