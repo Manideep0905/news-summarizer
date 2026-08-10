@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 from pydantic import field_validator
 from pydantic_settings import BaseSettings
 
@@ -13,14 +13,18 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str = "" 
     OPENAI_API_KEY: str = ""
 
-    ALLOWED_ORIGINS: str = ""
+    ALLOWED_ORIGINS: List[str] = []
+
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
-    @field_validator("ALLOWED_ORIGINS")
-    def parse_allowed_origins(cls, v: str) -> List[str]:
-        return v.split(",") if v else []
+    @field_validator("ALLOWED_ORIGINS", mode="before")
+    @classmethod
+    def parse_allowed_origins(cls, v):
+        if isinstance(v, str):
+            return [origin.strip() for origin in v.split(",")]
+        return v
 
     model_config = {
         "env_file": ".env",

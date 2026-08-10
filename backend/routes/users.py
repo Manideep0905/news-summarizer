@@ -98,8 +98,8 @@ async def login_user(
 
     cookie_options = {
         "httponly": True,
-        "secure": False,
-        "samesite": "lax",
+        "secure": True,
+        "samesite": "none",
         "path": "/"
     }
 
@@ -205,8 +205,8 @@ async def refresh_token(
 
     cookie_options = {
         "httponly": True,
-        "secure": False,
-        "samesite": "lax",
+        "secure": True,
+        "samesite": "none",
         "path": "/"
     }
 
