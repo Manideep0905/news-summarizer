@@ -25,7 +25,10 @@ ARTICLE_CACHE = {}
 
 
 @router.get("/detail")
-async def get_article_detail(article_url: str):
+async def get_article_detail(
+        article_url: str,
+        source: str | None = None
+    ):
 
     if article_url in ARTICLE_CACHE:
         return ARTICLE_CACHE[article_url]
@@ -42,6 +45,7 @@ async def get_article_detail(article_url: str):
         "title": article.title,
         "text": article.text,
         "image": article.top_image,
+        "source": source,
         "authors": article.authors,
         "published_date": str(article.publish_date)
     }
@@ -56,12 +60,16 @@ async def get_saved_articles(current_user=Depends(get_current_user)):
 
     user = await User.get(current_user.id)
 
+    print(user.saved_articles)
+
     if not user:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="User not found")
 
     articles = await Article.find(
         In(Article.article_url, user.saved_articles)
     ).to_list()
+
+    print(len(articles))
 
     return articles
 
@@ -80,7 +88,7 @@ async def saved_articles_ids(current_user=Depends(get_current_user)):
 
 
 @router.post("/summarize")
-async def summarize(body: SummaryRequest, current_user=Depends(get_current_user)):
+async def summarize(body: SaveArticleRequest, current_user=Depends(get_current_user)):
 
     user = await User.get(current_user.id)
 
@@ -141,15 +149,20 @@ async def remove_article(article_url: str, current_user=Depends(get_current_user
     return {"message": "Article removed"}
 
 
-@router.get("/{category}")
+@router.get("/{query}")
 async def get_articles(
-        category: str
+        # category: str
+        query: str
 ):
-    url = "https://newsapi.org/v2/top-headlines"
+    # url = "https://newsapi.org/v2/top-headlines"
+    url = "https://newsdata.io/api/1/latest"
 
     params = {
-        "apiKey": settings.NEWSAPI_API_KEY,
-        "category": category,
+        # "apiKey": settings.NEWSAPI_API_KEY,
+        "apikey": settings.NEWSAPI_API_KEY,
+        # "category": category,
+        "q": query,
+        "language": "en"
     }
 
     async with httpx.AsyncClient() as client:
@@ -159,15 +172,18 @@ async def get_articles(
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="Failed to fetch news articles")
 
     data = response.json()
-    articles = data.get("articles", [])
+    # articles = data.get("articles", [])
+    articles = data.get("results", [])
 
     return [
         {
             "title": article["title"],
             "description": article["description"],
-            "image_url": article["urlToImage"],
-            "source": article["source"]["name"],
-            "article_url": article["url"],
+            # "image_url": article["urlToImage"],
+            "image_url": article["image_url"],
+            "source": article["source_name"],
+            # "article_url": article["url"],
+            "article_url": article["link"],
             "summary": "TODO"
         }
         for article in articles

@@ -10,4 +10,5 @@ class SaveArticleRequest(BaseModel):
 class SummaryRequest(BaseModel):
     title: str
     description: str
+    image_url: str
     article_url: str
