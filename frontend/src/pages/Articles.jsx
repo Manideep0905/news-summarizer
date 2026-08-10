@@ -88,12 +88,26 @@ function Articles() {
                                             <Link 
                                                 className="inline-block w-fit dark:bg-indigo-500 p-1 text-sm lg:p-2 lg:text-lg dark:text-white cursor-pointer"
                                                 to={`/articles/detail?url=${encodeURIComponent(article.article_url)}`}
+                                                state={{
+                                                    title: article.title,
+                                                    description: article.description,
+                                                    image_url: article.image_url,
+                                                    source: article.source,
+                                                    article_url: article.article_url
+                                                }}
                                             >
                                                 Detailed view
                                             </Link>
                                             <Link
                                                 className="inline-block w-fit dark:bg-blue-600 p-1 text-sm lg:p-2 lg:text-lg dark:text-white cursor-pointer"
                                                 to={`/articles/summary?url=${encodeURIComponent(article.article_url)}`}
+                                                state={{
+                                                    title: article.title,
+                                                    description: article.description,
+                                                    image_url: article.image_url,
+                                                    source: article.source,
+                                                    article_url: article.article_url
+                                                }}
                                             >
                                                 Summarize
                                             </Link>

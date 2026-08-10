@@ -60,8 +60,8 @@ function MyArticlesPage() {
                 <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2">
 
                     {
-                        savedArticles.map((article, index) => (
-                            <div key={index} className={`${loading ? "animation-pulse" : ""} group relative bg-gray-800 p-8 overflow-hidden flex flex-col h-full`}>
+                        savedArticles.map((article) => (
+                            <div key={article.article_url} className={`${loading ? "animation-pulse" : ""} group relative bg-gray-800 p-8 overflow-hidden flex flex-col h-full`}>
                                 <img
                                     src={article.image_url}
                                     className="aspect-square w-full bg-gray-200 object-cover lg:aspect-auto lg:h-80"
@@ -75,12 +75,26 @@ function MyArticlesPage() {
                                     <Link 
                                         className="inline-block w-fit dark:bg-indigo-500 p-1 text-sm lg:p-2 lg:text-lg dark:text-white cursor-pointer"
                                         to={`/articles/detail?url=${encodeURIComponent(article.article_url)}`}
+                                        state={{
+                                            title: article.title,
+                                            description: article.description,
+                                            image_url: article.image_url,
+                                            source: article.source,
+                                            article_url: article.article_url
+                                        }}
                                     >
                                         Detailed view
                                     </Link>
                                     <Link
                                         className="inline-block w-fit dark:bg-blue-600 dark:text-white p-1 text-sm lg:p-2 lg:text-lg cursor-pointer"
                                         to={`/articles/summary?url=${encodeURIComponent(article.article_url)}`}
+                                        state={{
+                                            title: article.title,
+                                                description: article.description,
+                                                image_url: article.image_url,
+                                                source: article.source,
+                                                article_url: article.article_url
+                                        }}
                                     >
                                         Summarize
                                     </Link>

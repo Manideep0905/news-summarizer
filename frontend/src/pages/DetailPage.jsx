@@ -1,6 +1,6 @@
 import api from "../api/axios.js";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { Spinner } from "../components/index.js";
 
 function DetailPage() {
@@ -12,12 +12,18 @@ function DetailPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
+    const locationState = useLocation();
+    const articleMeta = locationState.state;
+
     const fetchDetailedArticle = async () => {
         try {
             const response = await api.get(
                 "/api/articles/detail",
                 {
-                    params: { article_url: articleUrl }
+                    params: {
+                        article_url: articleUrl,
+                        source: articleMeta.source
+                    }
                 }
             );
             setDetailedArticle(response.data);

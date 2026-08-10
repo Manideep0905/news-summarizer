@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import api from "../api/axios.js";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 function SummarizePage() {
 
@@ -11,17 +12,23 @@ function SummarizePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
+    const locationState = useLocation();
+    const articleMeta = locationState.state;
+
     const fetchDetailedArticle = async () => {
         try {
             const response = await api.get(
                 "/api/articles/detail",
                 {
-                    params: { article_url: articleUrl }
+                    params: {
+                        article_url: articleUrl,
+                        source: articleMeta.source
+                    }
                 }
             );
-            setDetailedArticle(response.data);
+            setDetailedArticle({...response.data});
 
-            await getSummarizedArticle(response.data);
+            await getSummarizedArticle({...response.data}, articleMeta.source);
         }
         catch (error) {
             console.log("Error while fetching detailed article", error);
@@ -34,7 +41,9 @@ function SummarizePage() {
             const payload = {
                 title: article.title,
                 description: article.text,
-                article_url: articleUrl
+                image_url: article.image,
+                article_url: articleUrl,
+                source: article.source
             }
             const response = await api.post("/api/articles/summarize", payload);
             setSummarizedArticle(response.data);
