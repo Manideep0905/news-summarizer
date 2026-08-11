@@ -5,3 +5,5 @@
 * It also has a bias detection feature which helps the user in identifying potentially biased and misleading articles
 
 * Offers fully functional authentication system by the use of JWT
+
+Project link: https://news-summarizer-dun.vercel.app
