@@ -68,7 +68,16 @@ function MyArticlesPage() {
                                 />
                                 <div className="flex flex-col flex-1 p-4">
                                     <h3 className="dark:text-white font-bold text-xl mb-4">{article.title}</h3>
-                                    <p className="mt-4 dark:text-white text-lg">{article.description}</p>
+                                    <p 
+                                        className="mt-4 dark:text-white text-lg overflow-hidden"
+                                    style={{
+                                        display: "-webkit-box",
+                                        WebkitLineClamp: 3,
+                                        WebkitBoxOrient: "vertical"
+                                    }}
+                                    >
+                                        {article.description}
+                                    </p>
                                     <p className="mt-4 dark:text-gray-300 text-md">Source: {article.source}</p>
                                 </div>
                                 <div className="p-4 flex justify-between">

@@ -17,7 +17,7 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const loginUrl = "http://localhost:8000/api/users/login";
+        const loginUrl = `${import.meta.env.VITE_API_URL}/api/users/login`;
 
         const loginInfo = {
             emailOrUsername: emailOrUsername,

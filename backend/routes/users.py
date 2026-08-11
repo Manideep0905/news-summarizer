@@ -134,9 +134,21 @@ async def logout_user(
     user.refresh_token = None
     await user.save()
 
+    cookie_options = {
+        "path": "/",
+        "secure": True,
+        "samesite": "none"
+    }
+
     # clear the access and refresh tokens from the cookies.
-    response.delete_cookie("access_token", path="/")
-    response.delete_cookie("refresh_token", path="/")
+    response.delete_cookie(
+        key="access_token",
+        **cookie_options
+    )
+    response.delete_cookie(
+        key="refresh_token",
+        **cookie_options
+    )
 
     return {
         "message": "User logged out successfully"

@@ -20,7 +20,7 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const registerUrl = "http://localhost:8000/api/users/register";
+        const registerUrl = `${import.meta.env.VITE_API_URL}/api/users/register`;
 
         const registerInfo = {
             first_name: firstName,

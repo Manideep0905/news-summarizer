@@ -18,7 +18,7 @@ function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const logoutHandler = async () => {
-        const logoutUrl = "http://localhost:8000/api/users/logout";
+        const logoutUrl = `${import.meta.env.VITE_API_URL}/api/users/logout`;
 
         const response = await fetch(logoutUrl, {
             method: "POST",
