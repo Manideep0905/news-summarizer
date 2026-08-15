@@ -22,6 +22,10 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+@app.get("/health")
+def health_check():
+    return {"status": "alive"}
+
 app.include_router(articles.router, prefix=settings.API_PREFIX)
 app.include_router(users.router, prefix=settings.API_PREFIX)
 
