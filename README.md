@@ -88,51 +88,53 @@ Built using **React**, **FastAPI**, **MongoDB**, and **OpenAI API**.
 ## 🏗️ System Architecture
 
 ```text
-User
- │
- ▼
+        User
+         │
+         ▼
 React Frontend (Vercel)
- │
- ▼
+         │
+         ▼
 FastAPI Backend (Render)
- │
- ├── News API
- │
- ├── Newspaper3k Scraper
- │
- ├── OpenAI API
- │
- ▼
-MongoDB Atlas
+         │
+         ├── News API
+         │
+         ├── Newspaper3k Scraper
+         │
+         ├── OpenAI API
+         │
+         ▼
+    MongoDB Atlas
 ```
 
 ---
 
+<!--
 ## 📂 Project Structure
 
 ```text
 news-summarizer/
-│
-├── frontend/
-│   ├── src/
-│   ├── public/
-│   ├── package.json
-│   └── vite.config.js
-│
-├── backend/
-│   ├── routes/
-│   ├── models/
-│   ├── schemas/
-│   ├── services/
-│   ├── core/
-│   ├── database/
-│   ├── main.py
-│   └── pyproject.toml
-│
-└── README.md
+|
+|__ frontend/
+|   |__ src/
+|   |__ public/
+|   |__ package.json
+|   |__ vite.config.js
+|
+|__ backend/
+|   |__ routes/
+|   |__ models/
+|   |__ schemas/
+|   |__ services/
+|   |__ core/
+|   |__ database/
+|   |__ main.py
+|   |__ pyproject.toml
+|
+|__ README.md
 ```
 
 ---
+-->
 
 ## ⚙️ Installation (when running the project locally)
 
@@ -153,19 +155,13 @@ cd news-summarizer
 cd backend
 ```
 
-### Create Virtual Environment
+### Install Dependencies (install uv if you don't have it)
 
 Using UV:
 
 ```bash
-uv venv
-source .venv/bin/activate
-```
-
-### Install Dependencies
-
-```bash
 uv sync
+source .venv/bin/activate
 ```
 
 ### Create Environment Variables
@@ -173,15 +169,26 @@ uv sync
 Create a `.env` file:
 
 ```env
+API_PREFIX=/api
+
+DEBUG=True
+
+DB_NAME=your_db_name
+
+ALLOWED_ORIGINS=http://localhost:5173
+
 NEWSAPI_API_KEY=your_newsapi_key
 
-OPENAI_API_KEY=your_openai_key
+OPENAI_API_KEY=your_openai_platform_api_key
 
-MONGODB_URL=your_mongodb_connection_string
+MONGODB_URL=your_mongodb_connection_url
 
-JWT_SECRET_KEY=your_secret_key
+ALGORITHM=HS256
 
-ALLOWED_ORIGINS=https://your-frontend-domain.vercel.app
+ACCESS_TOKEN_EXPIRE_MINUTES=15
+
+REFRESH_TOKEN_EXPIRE_DAYS=7
+
 ```
 
 ### Run Backend
@@ -231,6 +238,8 @@ Frontend runs on:
 ```text
 http://localhost:5173
 ```
+
+Now, you can open the above localhost frontend url and explore the project.
 
 ---
 
